@@ -20,3 +20,17 @@ Project setup and architecture planning.
 ### Notes
 
 -
+## Completed
+
+- Installed shadcn/ui
+- Installed next-themes
+- Installed Lucide React
+- Installed Framer Motion
+- Installed UI utility libraries
+
+## Learned
+
+- What a design system is
+- Why shadcn/ui was chosen
+- Difference between component libraries and design systems
+- Theme management in Next.js
