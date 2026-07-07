@@ -1,9 +1,9 @@
-import Logo from "@/components/common/Logo";
+import SearchForm from "@/components/landing/SearchForm";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen items-center justify-center">
-      <Logo />
+    <main className="min-h-screen flex items-center justify-center">
+      <SearchForm />
     </main>
   );
 }
