@@ -18,7 +18,8 @@ export class CommitteeAgent {
     financial: AnalystOpinion,
     risk: AnalystOpinion,
     market: AnalystOpinion,
-    news: AnalystOpinion
+    news: AnalystOpinion,
+    valuation: AnalystOpinion
   ): Promise<InvestmentDecision> {
 
     const prompt =
@@ -28,6 +29,7 @@ export class CommitteeAgent {
         risk,
         market,
         news,
+        valuation,
       );
 
     return await

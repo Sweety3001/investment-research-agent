@@ -17,6 +17,7 @@ import { FinnhubProvider } from "@/services/providers/finnhub.provider";
 import {
   InvestmentDecision
 } from "@/types";
+import { ValuationAgent } from "@/lib/agents/valuation.agent";
 
 function fallbackOpinion(): AnalystOpinion {
   return {
@@ -104,6 +105,7 @@ console.log(
         RiskAgent.analyze(context),
         MarketAgent.analyze(context),
         NewsAgent.analyze(context),
+        ValuationAgent.analyze(context),
       ]);
 
     // Log failures if any
@@ -148,6 +150,11 @@ console.log(
   results[4].status === "fulfilled"
     ? results[4].value
     : fallbackOpinion();
+
+    const valuation =
+  results[5].status === "fulfilled"
+    ? results[5].value
+    : fallbackOpinion();
     // -----------------------------
     // Investment Committee
     // -----------------------------
@@ -167,6 +174,7 @@ try {
     risk,
     market,
     news,
+    valuation,
   );
 } catch (error) {
   console.error(
@@ -211,13 +219,7 @@ try {
 
       market,
       news,
-      valuation: {
-        summary: "Valuation analysis not implemented yet.",
-        strengths: [],
-        weaknesses: [],
-        score: 0,
-        confidence: 0,
-      },
+      valuation,
 
       sources,
     };

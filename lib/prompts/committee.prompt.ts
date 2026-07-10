@@ -5,7 +5,8 @@ export function buildCommitteePrompt(
   financial: AnalystOpinion,
   risk: AnalystOpinion,
   market: AnalystOpinion,
-  news: AnalystOpinion
+  news: AnalystOpinion,
+  valuation: AnalystOpinion
 ): string {
   return `
 ROLE:
@@ -71,6 +72,21 @@ ${news.score}/10
 
 Summary:
 ${news.summary}
+
+VALUATION ANALYST
+
+Score:
+${valuation.score}/10
+
+Summary:
+${valuation.summary}
+
+Strengths:
+${valuation.strengths.join("\n")}
+
+Weaknesses:
+${valuation.weaknesses.join("\n")}
+
 
 TASK:
 
