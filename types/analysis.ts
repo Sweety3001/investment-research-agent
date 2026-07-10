@@ -3,10 +3,17 @@ export interface Company {
   ticker: string;
   industry: string;
   marketCap: number;
+
   logo?: string;
+  country?: string;
+  currency?: string;
+  exchange?: string;
+  ipo?: string;
+  website?: string;
 }
 
 export interface AnalystOpinion {
+  // title: string;
   summary: string;
   strengths: string[];
   weaknesses: string[];
@@ -14,7 +21,7 @@ export interface AnalystOpinion {
   confidence: number; // Percentage (0-100)
 }
 export interface InvestmentDecision {
-  recommendation: "INVEST" | "PASS";
+  recommendation: "INVEST" | "HOLD" | "PASS";
   confidence: number; // Percentage (0-100)
   overallScore: number; //Range(0-10)
   reasoning: string;
@@ -36,6 +43,7 @@ export interface InvestmentReport {
 
   committee: InvestmentDecision;
 
+  news: AnalystOpinion;
   sources: Source[];
   
 }
@@ -43,4 +51,11 @@ export interface Source {
   name: string;
   url: string;
   type: "news" | "finance" | "company";
+}
+export interface NewsArticle {
+  headline: string;
+  summary: string;
+  source: string;
+  url: string;
+  datetime: number;
 }

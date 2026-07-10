@@ -1,9 +1,6 @@
 "use client";
-
+import { ResearchApi } from "@/services/api/research.api";
 import { useState } from "react";
-async function handleAnalyze() {
-  console.log("Analyze clicked!");
-}
 import { InvestmentReport } from "@/types";
 export default function SearchForm() {
   const [company, setCompany] = useState("");
@@ -20,24 +17,14 @@ export default function SearchForm() {
   setError("");
 
   try {
-    const response = await fetch("/api/v1/research", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        company,
-      }),
-    });
-
-    const result = await response.json();
+    const result = await ResearchApi.analyze(company);
 
     if (!result.success) {
-  setError(result.message);
-  return;
-}
+      setError(result.message);
+      return;
+    }
 
-setReport(result.data);
+    setReport(result.data!);
   } catch (error) {
     console.error(error);
     setError("Something went wrong.");
