@@ -1,26 +1,51 @@
 import mongoose from "mongoose";
 
-const MONGODB_URI =
-  process.env.MONGODB_URI!;
-
-if (!MONGODB_URI) {
-  throw new Error(
-    "Missing MONGODB_URI"
-  );
+declare global {
+  var mongooseCache:
+    | {
+        conn: typeof mongoose | null;
+        promise:
+          | Promise<typeof mongoose>
+          | null;
+      }
+    | undefined;
 }
 
+const cached =
+  global.mongooseCache ?? {
+    conn: null,
+    promise: null,
+  };
+
+global.mongooseCache = cached;
+
 export async function connectDB() {
-  if (
-    mongoose.connection.readyState >= 1
-  ) {
-    return;
+  const MONGODB_URI =
+    process.env.MONGODB_URI;
+
+  if (!MONGODB_URI) {
+    throw new Error(
+      "Missing MONGODB_URI"
+    );
   }
 
-  await mongoose.connect(
-    MONGODB_URI
-  );
+  if (cached.conn) {
+    return cached.conn;
+  }
 
-  console.log(
-    "MongoDB Connected"
-  );
+  if (!cached.promise) {
+    cached.promise =
+      mongoose.connect(
+        MONGODB_URI,
+        {
+          dbName:
+            "alphaforge",
+        }
+      );
+  }
+
+  cached.conn =
+    await cached.promise;
+
+  return cached.conn;
 }
