@@ -5,6 +5,10 @@ AlphaForge AI is an AI-powered investment research platform that analyzes public
 Rather than relying on a single large language model prompt, AlphaForge mimics the workflow of an institutional equity research team by delegating research tasks to multiple domain experts and aggregating their opinions through an AI Investment Committee.
 
 ---
+## Project Link
+* [Click here](#https://investment-research-agent-ep1t-six.vercel.app/)
+
+---
 
 ## Table of Contents
 
