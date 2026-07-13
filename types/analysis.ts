@@ -4,12 +4,12 @@ export interface Company {
   industry: string;
   marketCap: number;
 
-  logo?: string;
   country?: string;
   currency?: string;
   exchange?: string;
   ipo?: string;
   website?: string;
+  logo?: string;
 }
 
 export interface AnalystOpinion {
@@ -44,13 +44,14 @@ export interface InvestmentReport {
   committee: InvestmentDecision;
 
   news: AnalystOpinion;
+  newsArticles: NewsArticle[];
   sources: Source[];
   
 }
 export interface Source {
   name: string;
   url: string;
-  type: "news" | "finance" | "company";
+  type: "Company Data" | "Financial Data" | "News Data";
 }
 export interface NewsArticle {
   headline: string;

@@ -18,6 +18,10 @@ import {
   InvestmentDecision
 } from "@/types";
 import { ValuationAgent } from "@/lib/agents/valuation.agent";
+import { connectDB } from "@/lib/db/connect";
+import { Report } from "@/models/report.model";
+import { Watchlist }
+from "@/models/watchlist.model";
 
 function fallbackOpinion(): AnalystOpinion {
   return {
@@ -75,14 +79,14 @@ export class ResearchService {
       financialMetrics
     );
 
-    const companyNews =
+    const newsArticles =
   await FinnhubProvider.getCompanyNews(
     symbol
   );
 
 console.log(
   "Latest News:",
-  companyNews.length
+  newsArticles.length
 );
 
     // -----------------------------
@@ -91,7 +95,7 @@ console.log(
     const context: ResearchContext = {
       company: companyInfo,
       financialMetrics,
-      news: companyNews,
+      news: newsArticles,
       userQuestion: `Analyze ${company} for long-term investment.`,
     };
 
@@ -194,17 +198,27 @@ try {
     // Sources
     // -----------------------------
     const sources: Source[] = [
-      {
-        name: "Finnhub Company Profile",
-        url: "https://finnhub.io",
-        type: "finance",
-      },
-    ];
+  {
+    name: "Finnhub Company Profile",
+    url: "https://finnhub.io",
+    type: "Company Data",
+  },
+  {
+    name: "Finnhub Financial Metrics",
+    url: "https://finnhub.io",
+    type: "Financial Data",
+  },
+  {
+    name: "Finnhub Company News",
+    url: "https://finnhub.io",
+    type: "News Data",
+  },
+];
 
     // -----------------------------
     // Final Report
-    // -----------------------------
-    return {
+    // ------ -----------------------
+    const report: InvestmentReport = {
       company: companyInfo,
 
       generatedAt: new Date(),
@@ -219,9 +233,62 @@ try {
 
       market,
       news,
+      newsArticles,
       valuation,
 
       sources,
     };
+    try {
+  await connectDB();
+
+  await Report.create(report);
+
+  console.log(
+    "Report saved to MongoDB"
+  );
+} catch (error) {
+  console.error(
+    "Failed to save report:",
+    error
+  );
+}
+try {
+  const watchlist =
+    await Watchlist.findOne();
+
+  if (watchlist) {
+    const companyIndex =
+      watchlist.companies.findIndex(
+        (c: any) =>
+          c.ticker ===
+          companyInfo.ticker
+      );
+
+    if (companyIndex !== -1) {
+      watchlist.companies[
+        companyIndex
+      ].recommendation =
+        committee.recommendation;
+
+      watchlist.companies[
+        companyIndex
+      ].score =
+        committee.overallScore;
+
+      watchlist.companies[
+        companyIndex
+      ].lastAnalyzed =
+        new Date();
+
+      await watchlist.save();
+    }
+  }
+} catch (error) {
+  console.error(
+    "Failed to update watchlist",
+    error
+  );
+}
+return report;
   }
 }

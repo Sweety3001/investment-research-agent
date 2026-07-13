@@ -9,4 +9,5 @@ export interface CompanyProfile {
   exchange?: string;
   ipo?: string;
   website?: string;
+  logo?: string;
 }

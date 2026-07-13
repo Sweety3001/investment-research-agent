@@ -35,6 +35,7 @@ export class FinnhubProvider {
       exchange: data.exchange,
       ipo: data.ipo,
       website: data.weburl,
+      logo: data.logo,
     };
   }
   static async searchCompany(
